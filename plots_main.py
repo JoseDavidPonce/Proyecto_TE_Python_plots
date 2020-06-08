@@ -1,31 +1,46 @@
-from mpl_toolkits.mplot3d import axes3d
+  
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection= '3d')
-
-
-def get_test_data(delta=0.05):
-
-    from matplotlib.mlab import  bivariate_normal
-    x = y = np.arange(-3.0, 3.0, delta)
-    X, Y = np.meshgrid(x, y)
-
-    Z1 = bivariate_normal(X, Y, 1.0, 1.0, 0.0, 0.0)
-    Z2 = bivariate_normal(X, Y, 1.5, 0.5, 1, 1)
-    Z = Z2 - Z1
-
-    X = X * 10
-    Y = Y * 10
-    Z = Z * 500
-    return X, Y, Z
+import sympy as sy
+from sympy.abc import x,y
+from numpy import exp,sinh,sin,cos,tan,arctan,pi
 
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
 
-x, y, z = axes3d.get_test_data(0.05)
-ax.plot_wireframe(x,y,z, rstride=2, cstride=2)
 
+fig=plt.figure()
+ax=Axes3D(fig)
+a=3
+b=1
+N=20
+
+
+x1=np.linspace(-b,a,1000)
+y1=np.linspace(0,b,1000)
+X, Y=np.meshgrid(x1,y1)
+
+
+def Ponce(n,b):
+    return sy.integrate((2*y**3+5)*sy.sin(n*pi*y/b),(y,0,b))
+
+
+def An(n,a,b):
+    return ((exp(n*pi)-exp(-n*pi*a/b))/(b*sinh(n*pi*(a/b+1))))*Ponce(n,b)
+
+def Bn(n,a,b):
+    return ((exp(n*pi)-exp(-n*pi*a/b))/(b*sinh(n*pi*(a/b+1))))*Ponce(n,b)
+
+def z(x,y):
+    Z=0
+    for k in range(N):
+        n=k+1
+        Z=Z+(An(n,a,b)*exp(n*pi*x/b)+Bn(n,a,b)*exp(-n*pi*x/b))*sin(n*pi*y/b)
+    return Z
+
+
+ax.plot_surface(X,Y,z(X,Y))
+plt.title("Voltaje n="+str(N))
+plt.xlabel('X')
+plt.ylabel('Y')
 plt.show()
