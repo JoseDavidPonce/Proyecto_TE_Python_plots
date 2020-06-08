@@ -11,11 +11,11 @@ e=8.85.*10.^(-12)
 
 [x,y,z]=sph2cart(theta,phi,rho)
 neotheta=atan(sqrt(x.^2+y.^2)./(z))
-sigma = (b.*k)./a-(2.*k.*a)./(3.*b).*(3.*(cos(neotheta)).^2-1)+phicero./(a.*e)
+sigma = ((k.*(2.*a-b))./(b)-(2.*k)./(15).*(2+(3.*a.^5)./(b.^5)).*(3.*(cos(neotheta)).^2-1)+(2.*phicero.*a)./(b.^2))
 
 surf(x,y,z,sigma)
 colorbar;
-title("Esfera R=a")
+title("Esfera R=b")
 xlabel("x")
 ylabel("y")
 zlabel("z")
