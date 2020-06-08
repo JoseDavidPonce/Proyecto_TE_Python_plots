@@ -11,7 +11,8 @@ for n = 1:i
   sigmatotal = sigma+sigmatotal;
 endfor
 
-title("Pared x=a")
+
 plot(y,sigmatotal)
+title("Pared x=a")
 xlabel("y")
 ylabel("Densidad de carga")
